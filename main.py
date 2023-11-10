@@ -12,17 +12,16 @@ clock = pygame.time.Clock()
 start_time = time.time()
 run = True
 
-
 def player_input():
     for event in pygame.event.get():
-        if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             return False
     return pygame.key.get_pressed()
 
 
 def logic(action_from_input):
     global run
-    if not action:
+    if not action_from_input:
         run = False
     else:
         player.movement(action_from_input)
@@ -41,12 +40,13 @@ screen = Screen(1920, 1080, "Pythland")
 player = Object('player.png', 50, 50, 600, 300, 1)
 puzzle_window = Object('blank_window.png', 800, 800, 0, 0, 0)
 text = Text("Arial", 36)
-
+grenz = screen.hranice(0, 800, 0, 800, 0)
+#gui_fce = gui.check_collision(player, 100, 100, 50, 50)
 while run:
     action = player_input()
     logic(action)
     render_game()
-    gui.check_collision(player_x, player_y, x_prekazka, y_prekazka, player_width, player_height)
     pygame.display.update()
-
+    grenz()
+    #gui_fce()
 pygame.quit()
