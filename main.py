@@ -1,52 +1,57 @@
 import pygame
-import time
-import random
+import sys
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QTextEdit
+from PyQt6.QtCore import Qt
+
 from object import Object
-from screen import Screen
 from text import Text
-import gui
-
-pygame.init()
-
-clock = pygame.time.Clock()
-start_time = time.time()
-run = True
-
-def player_input():
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-            return False
-    return pygame.key.get_pressed()
 
 
-def logic(action_from_input):
-    global run
-    if not action_from_input:
-        run = False
-    else:
-        player.movement(action_from_input)
+class PygameWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.init_pygame()
 
+    def init_pygame(self):
+        pygame.init()
+        self.clock = pygame.time.Clock()
+        self.player = Object('player.png', 50, 50, 600, 300, 1)
+        self.text = Text("Arial", 36)
+        self.run = True
 
-def render_game():
-    clock.tick(140)
-    screen.display.fill((0, 0, 0))
-    pygame.draw.rect(screen.display, (255, 255, 255), (550, 50, 840, 750), 5)
-    screen.display.blit(player.sprite, (player.x, player.y))
-    text.render(screen, str(player.x), 200, 200)
-    text.render(screen, str(player.y), 200, 240)
+    def player_input(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+                self.run = False
+        return pygame.key.get_pressed()
 
+    def logic(self, action_from_input):
+        if not action_from_input:
+            self.run = False
+        else:
+            self.player.movement(action_from_input)
 
-screen = Screen(1920, 1080, "Pythland")
-player = Object('player.png', 50, 50, 600, 300, 1)
-puzzle_window = Object('blank_window.png', 800, 800, 0, 0, 0)
-text = Text("Arial", 36)
-grenz = screen.hranice(0, 800, 0, 800, 0)
-#gui_fce = gui.check_collision(player, 100, 100, 50, 50)
-while run:
-    action = player_input()
-    logic(action)
-    render_game()
-    pygame.display.update()
-    grenz()
-    #gui_fce()
-pygame.quit()
+    def render_game(self):
+        self.clock.tick(140)
+        self.display.fill((0, 0, 0))
+        pygame.draw.rect(self.display, (255, 255, 255), (550, 50, 840, 750), 5)
+        self.display.blit(self.player.sprite, (self.player.x, self.player.y))
+        self.text.render(self, str(self.player.x), 200, 200)
+        self.text.render(self, str(self.player.y), 200, 240)
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.central_widget = PygameWidget()
+        self.setCentralWidget(self.central_widget)
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Space:
+            # Toggle between Pygame and QTextEdit visibility
+            self.central_widget.setVisible(not self.central_widget.isVisible())
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec())
