@@ -38,7 +38,6 @@ def render_game():
 
 screen = Screen(1920, 1080, "Pythland")
 player = Object('player.png', 50, 50, 600, 300, 1)
-puzzle_window = Object('blank_window.png', 800, 800, 0, 0, 0)
 text = Text("Arial", 36)
 
 while run:
