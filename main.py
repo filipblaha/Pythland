@@ -1,9 +1,9 @@
 import pygame
 import time
-import random
-from object import Object
-from screen import Screen
-from text import Text
+from Player import Player
+from Screen import Screen
+from Text import Text
+from Object import Object
 
 pygame.init()
 
@@ -29,22 +29,27 @@ def logic(action_from_input):
 
 def render_game():
     clock.tick(140)
-    screen.display.fill((0, 0, 0))
-    pygame.draw.rect(screen.display, (255, 255, 255), (700, 50, 1180, 980), 5)
-    screen.display.blit(player.sprite, (player.x, player.y))
-    text.render(screen, str(player.x), 200, 200)
-    text.render(screen, str(player.y), 200, 240)
-    
+    screen.display.fill((100, 100, 100))
+    screen.display.blit(border.sprite, border.rect)
+    screen.display.blit(player.sprite, player.rect)
+    text.render(screen, str(player.rect.x), 200, 200)
+    text.render(screen, str(player.rect.y), 200, 240)
+
+
+def update():
+    player.update(border)
+
 
 screen = Screen(1920, 1080, "Pythland")
-player = Object('player.png', 50, 50, 600, 300, 1)
+player = Player('player.png', 50, 50, 800, 300, 1)
+border = Object('maze.png', 1180, 980, 700, 50)
 text = Text("Arial", 36)
 
 while run:
-
     action = player_input()
     logic(action)
     render_game()
+    update()
 
     pygame.display.update()
 
