@@ -30,7 +30,7 @@ def logic(action_from_input):
 def render_game():
     clock.tick(140)
     screen.display.fill((0, 0, 0))
-    pygame.draw.rect(screen.display, (255, 255, 255), (550, 50, 840, 750), 5)
+    pygame.draw.rect(screen.display, (255, 255, 255), (700, 50, 1180, 980), 5)
     screen.display.blit(player.sprite, (player.x, player.y))
     text.render(screen, str(player.x), 200, 200)
     text.render(screen, str(player.y), 200, 240)
