@@ -1,8 +1,9 @@
 import pygame
 
 
-class Screen:
-    def __init__(self, width, height, name):
+class Screen(pygame.sprite.Sprite):
+    def __init__(self, width, height, name, *groups):
+        super().__init__(*groups)
         self.width = width
         self.height = height
         self.name = name

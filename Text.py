@@ -1,8 +1,9 @@
 import pygame
 
 
-class Text:
-    def __init__(self, font_name, size):
+class Text(pygame.sprite.Sprite):
+    def __init__(self, font_name, size, *groups):
+        super().__init__(*groups)
         self.f = pygame.font.SysFont(font_name, size)
 
     def render(self, render_to, text_to_render, x, y):

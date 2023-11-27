@@ -1,8 +1,10 @@
 import pygame
+import pygame.sprite
 
 
-class Player:
-    def __init__(self, png, width, height, x, y, speed):
+class Player(pygame.sprite.Sprite):
+    def __init__(self, png, width, height, x, y, speed, *groups):
+        super().__init__(*groups)
         self.sprite = pygame.image.load(png)
         self.sprite = pygame.transform.scale(self.sprite, (width, height))
         self.rect = self.sprite.get_rect()
