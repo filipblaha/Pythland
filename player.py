@@ -1,29 +1,8 @@
 import pygame
-from screen import Screen
 from settings import *
 
-# class Object:
-#     def __init__(self, png, width, height, x, y, speed):
-#         self.sprite = pygame.image.load(png)
-#         self.sprite = pygame.transform.scale(self.sprite, (width, height))
-#         self.x = x
-#         self.y = y
-#         self.speed = speed
-#
-#     def movement(self, keys):
-#         if keys[pygame.K_a]:
-#             self.x -= self.speed
-#         if keys[pygame.K_d]:
-#             self.x += self.speed
-#         if keys[pygame.K_w]:
-#             self.y -= self.speed
-#         if keys[pygame.K_s]:
-#             self.y += self.speed
-
-
-
 class Player(pygame.sprite.Sprite):
-    def __init__(self,pos,groups,obsticle_sprite):
+    def __init__(self,pos,groups,obstacle_sprite):
         super().__init__(groups)
         self.image = pygame.image.load('graphic/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
@@ -31,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.speed = 5
 
-        self.obsticle_sprite = obsticle_sprite
+        self.obstacle_sprite = obstacle_sprite
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -78,4 +57,3 @@ class Player(pygame.sprite.Sprite):
     def update(self):
         self.input()
         self.move(self.speed)
-
