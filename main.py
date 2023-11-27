@@ -11,17 +11,33 @@ clock = pygame.time.Clock()
 start_time = time.time()
 run = True
 
+font = pygame.font.Font(None, 36)
+
 
 def player_input():
     for event in pygame.event.get():
+        # user pressing ESC or X (CLOSE APP) to quit
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return False
+        # user pressing button to check
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            if button.rect.collidepoint(mouse_x, mouse_y):
-                pygame.time.set_timer(pygame.USEREVENT, 500)
+            return "BUTTON_PRESSED"
+        # the code is right
         elif event.type == pygame.USEREVENT:
-            player.change_animation()
+            return "ANIMATION"
+        # user pressing keys
+        elif event.type == pygame.KEYDOWN:
+            # pressed ENTER
+            if event.key == pygame.K_RETURN:
+                return "ENTER"
+            # pressed BACKSPACE
+            elif event.key == pygame.K_BACKSPACE:
+                if text.user_text:
+                    return "BACKSPACE"
+            # pressed other keys
+            else:
+                if not text.user_text or event.key != pygame.K_KP_ENTER:
+                    text.user_text[-1] += event.unicode
     return pygame.key.get_pressed()
 
 
@@ -29,8 +45,18 @@ def logic(action_from_input):
     global run
     if not action:
         run = False
-    #else:
-        #player.movement(action_from_input)
+    if action == "ENTER":
+        text.user_text.append("")
+    # pressed BACKSPACE
+    elif action == "BACKSPACE":
+        if text.user_text:
+            text.user_text[-1] = text.user_text[-1][:-1]
+    elif action == "BUTTON_PRESSED":
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+        if button.rect.collidepoint(mouse_x, mouse_y):
+            pygame.time.set_timer(pygame.USEREVENT, 500)
+    elif action == "ANIMATION":
+        player.change_animation()
 
 
 def render_game():
@@ -46,7 +72,8 @@ def render_game():
         screen.display.blit(hearthd.sprite, hearthd.rect)
 
     # text.render(screen, str(player.rect.x), 200, 200)
-    # text.render(screen, str(player.rect.y), 200, 240)
+    text.render_user_text(screen, 65, 55)
+    # text_surface = font.render(text.user_text, True, (255, 255, 255))
 
 
 def update():
@@ -62,7 +89,7 @@ button = Object('check_button.png', 400, 150, 150, 830)
 
 hearth = [None] * 10
 for i in range(10):
-    hearth[i] = Object('hearth.png', 50, 50, 1050+i*+55, 550)
+    hearth[i] = Object('hearth.png', 50, 50, 1050 + i * +55, 550)
 
 text = Text("Arial", 36)
 
