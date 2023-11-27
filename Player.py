@@ -23,6 +23,7 @@ class Player:
         if keys[pygame.K_s]:
             self.rect.y += self.speed
 
+
     def update(self, second_object):
         if not second_object.rect.contains(self.rect):
             self.rect = self.previous_rect

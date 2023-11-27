@@ -16,15 +16,18 @@ def player_input():
     for event in pygame.event.get():
         if event.type == pygame.QUIT or event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             return False
-    return pygame.key.get_pressed()
+        elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            if button.rect.collidepoint(mouse_x, mouse_y):
+                return True
 
 
 def logic(action_from_input):
     global run
     if not action:
         run = False
-    else:
-        player.movement(action_from_input)
+    elif action_from_input:
+        return True
 
 
 def render_game():
@@ -32,8 +35,15 @@ def render_game():
     screen.display.fill((100, 100, 100))
     screen.display.blit(border.sprite, border.rect)
     screen.display.blit(player.sprite, player.rect)
-    text.render(screen, str(player.rect.x), 200, 200)
-    text.render(screen, str(player.rect.y), 200, 240)
+    screen.display.blit(enemy.sprite, enemy.rect)
+    screen.display.blit(button.sprite, button.rect)
+
+    for a in range(10):
+        hearthd = hearth[a]
+        screen.display.blit(hearthd.sprite, hearthd.rect)
+
+    # text.render(screen, str(player.rect.x), 200, 200)
+    # text.render(screen, str(player.rect.y), 200, 240)
 
 
 def update():
@@ -42,7 +52,14 @@ def update():
 
 screen = Screen(1920, 1080, "Pythland")
 player = Player('player.png', 50, 50, 800, 300, 1)
-border = Object('maze.png', 1180, 980, 700, 50)
+border = Object('forest.png', 1180, 980, 700, 50)
+enemy = Object('goblin.png', 250, 300, 1200, 600)
+button = Object('maze.png', 200, 200, 200, 400)
+
+hearth = [None] * 10
+for i in range(10):
+    hearth[i] = Object('hearth.png', 50, 50, 1050+i*+55, 550)
+
 text = Text("Arial", 36)
 
 while run:
