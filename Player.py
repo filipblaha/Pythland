@@ -12,6 +12,7 @@ class Player:
         self.width = width
         self.height = height
         self.previous_rect = self.rect
+        self.animation_status = 10
 
     def movement(self, keys):
         if keys[pygame.K_a]:
@@ -23,6 +24,10 @@ class Player:
         if keys[pygame.K_s]:
             self.rect.y += self.speed
 
+    def change_animation(self):
+        #if self.animation_status == 0:
+        #    self.animation_status = 10
+        self.animation_status = self.animation_status - 1
 
     def update(self, second_object):
         if not second_object.rect.contains(self.rect):

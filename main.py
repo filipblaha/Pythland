@@ -19,26 +19,29 @@ def player_input():
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if button.rect.collidepoint(mouse_x, mouse_y):
-                return True
+                pygame.time.set_timer(pygame.USEREVENT, 500)
+        elif event.type == pygame.USEREVENT:
+            player.change_animation()
+    return pygame.key.get_pressed()
 
 
 def logic(action_from_input):
     global run
     if not action:
         run = False
-    elif action_from_input:
-        return True
+    #else:
+        #player.movement(action_from_input)
 
 
 def render_game():
     clock.tick(140)
     screen.display.fill((100, 100, 100))
+    screen.display.blit(code.sprite, code.rect)
     screen.display.blit(border.sprite, border.rect)
-    screen.display.blit(player.sprite, player.rect)
     screen.display.blit(enemy.sprite, enemy.rect)
     screen.display.blit(button.sprite, button.rect)
 
-    for a in range(10):
+    for a in range(player.animation_status):
         hearthd = hearth[a]
         screen.display.blit(hearthd.sprite, hearthd.rect)
 
@@ -54,7 +57,8 @@ screen = Screen(1920, 1080, "Pythland")
 player = Player('player.png', 50, 50, 800, 300, 1)
 border = Object('forest.png', 1180, 980, 700, 50)
 enemy = Object('goblin.png', 250, 300, 1200, 600)
-button = Object('maze.png', 200, 200, 200, 400)
+code = Object('code.png', 600, 750, 50, 50)
+button = Object('check_button.png', 400, 150, 150, 830)
 
 hearth = [None] * 10
 for i in range(10):
