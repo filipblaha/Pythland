@@ -23,7 +23,7 @@ from settings import *
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self,pos,groups,obsticle_sprite):
+    def __init__(self,pos,groups,obstacle_sprite):
         super().__init__(groups)
         self.image = pygame.image.load('graphic/player.png').convert_alpha()
         self.rect = self.image.get_rect(topleft=pos)
@@ -31,7 +31,7 @@ class Player(pygame.sprite.Sprite):
         self.direction = pygame.math.Vector2()
         self.speed = 5
 
-        self.obsticle_sprite = obsticle_sprite
+        self.obstacle_sprite = obstacle_sprite
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -60,7 +60,7 @@ class Player(pygame.sprite.Sprite):
 
     def collision (self,direction):
         if direction == 'horizontal':
-            for sprite in self.obsticle_sprite:
+            for sprite in self.obstacle_sprite:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.x > 0: #pohyb vpravo
                         self.rect.right = sprite.rect.left
@@ -68,7 +68,7 @@ class Player(pygame.sprite.Sprite):
                         self.rect.left = sprite.rect.right
 
         if direction == 'vertical':
-            for sprite in self.obsticle_sprite:
+            for sprite in self.obstacle_sprite:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.y > 0:  # pohyb dolu
                         self.rect.bottom = sprite.rect.top

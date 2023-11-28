@@ -12,7 +12,7 @@ class Level:
 
         #sprite group setup
         self.visible_sprites = YSortCameraGroup()
-        self.obsticle_sprite = pygame.sprite.Group()
+        self.obstacle_sprite = pygame.sprite.Group()
 
         #sprite setup
         self.creat_map()
@@ -22,19 +22,32 @@ class Level:
                 x = col_index * TILESIZE
                 y = row_index * TILESIZE
                 if col == '221':
-                    Tile((x,y),[self.visible_sprites, self.obsticle_sprite])
+                    Tile((x,y),[self.visible_sprites, self.obstacle_sprite])
                 if col == 'p':
-                    self.player = Player((x,y),[self.visible_sprites],self.obsticle_sprite)
+                    self.player = Player((x,y),[self.visible_sprites],self.obstacle_sprite)
 
 
     def run(self):
         #update and draw the game
-        self.visible_sprites.draw(self.display_surface)
+        self.visible_sprites.custum_draw(self.player)
         self.visible_sprites.update()
         debug(self.player.direction)
 
 class YSortCameraGroup(pygame.sprite.Group):
     def __init__(self):
 
-        # zakladni nastaveni
+        # zakladni nastaveni - NASTAVENI KAMERY
         super().__init__()
+        self.display_surface = pygame.display.get_surface()
+        self.half_width = self.display_surface.get_size()[0] // 2
+        self.half_height = self.display_surface.get_size()[1] // 2
+        self.offset = pygame.math.Vector2()
+    def custum_draw(self,player):
+
+        # ziskani offsetu
+        self.offset.x = player.rect.centerx - self.half_width
+        self.offset.y = player.rect.centery - self.half_height
+
+        for sprite in self.sprites():
+            offset_pos = sprite.rect.topleft - self.offset
+            self.display_surface.blit(sprite.image,offset_pos)
