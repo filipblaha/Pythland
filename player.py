@@ -34,12 +34,14 @@ class Player(pygame.sprite.Sprite):
             self.direction = self.direction.normalize()     # NASTAVENÍ STEJNÉ RYCHLOSTI DO VŠECH SMĚRŮ
 
         self.rect.x += self.direction.x * speed
+        self.collision('horizontal')
         self.rect.y += self.direction.y * speed
+        self.collision('vertical')
         #self.rect.center += self.direction * speed
 
     def collision (self,direction):
         if direction == 'horizontal':
-            for sprite in self.obsticle_sprite:
+            for sprite in self.obstacle_sprite:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.x > 0: #pohyb vpravo
                         self.rect.right = sprite.rect.left
@@ -47,7 +49,7 @@ class Player(pygame.sprite.Sprite):
                         self.rect.left = sprite.rect.right
 
         if direction == 'vertical':
-            for sprite in self.obsticle_sprite:
+            for sprite in self.obstacle_sprite:
                 if sprite.rect.colliderect(self.rect):
                     if self.direction.y > 0:  # pohyb dolu
                         self.rect.bottom = sprite.rect.top
