@@ -3,7 +3,9 @@ from settings import *
 from tile import Tile
 from player import Player
 from debug import debug
-from  support import *
+from support import *
+from random import choice
+
 
 class Level:
     def __init__(self):
@@ -19,7 +21,12 @@ class Level:
         self.creat_map()
     def creat_map(self):
         layout = {
-                'boundary': import_csv_layout('map/zelda_FloorBlocks.csv')
+                'boundary': import_csv_layout('map/zelda_FloorBlocks.csv'),
+                'grass': import_csv_layout('map/zelda_Grass.csv'),
+                'object': import_csv_layout('map/zelda_Objects.csv'),
+        }
+        graphics = {
+                'grass': import_folder('map/Grass')
         }
 
         for style,layout in layout.items():
@@ -29,7 +36,14 @@ class Level:
                         x = col_index * TILESIZE
                         y = row_index * TILESIZE
                         if style == 'boundary':
-                            Tile((x,y),[self.visible_sprites,self.obstacle_sprite],'invinsible')
+                            Tile((x, y),[self.obstacle_sprite],'invinsible')
+                        if style == 'grass':
+                            random_grass_image = choice(graphics['grass'])
+                            Tile((x,y),[self.visible_sprites,self.obstacle_sprite],'grass',random_grass_image)
+                            pass
+                        if style == 'object':
+        #                     pridani bjectu
+                            pass
         #         if col == '221':
         #             Tile((x,y),[self.visible_sprites, self.obstacle_sprite])
         #         if col == 'p':
@@ -53,6 +67,7 @@ class YSortCameraGroup (pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
+        self.zoom_level = 1.0  # Úroveň přiblížení
 
     #     vytvareni podlahy
         self.floor_surf = pygame.image.load('graphic/background.png').convert()
