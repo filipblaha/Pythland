@@ -1,11 +1,11 @@
 import tkinter as tk
 from tkinter import ttk
-
 class PygameFrame(ttk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.init_ui()
+        self.collision = False
 
     def init_ui(self):
         self.canvas = tk.Canvas(self, width=950, height=500)
@@ -13,6 +13,7 @@ class PygameFrame(ttk.Frame):
 
         self.text_widget = tk.Text(self)
         self.text_widget.grid(row=0, column=0, rowspan=2, sticky="nsew")
+        self.text_widget.config(state=tk.DISABLED)
 
         with open('zadanix.txt', 'r') as zadani:
             zadani_cislox = zadani.read()
@@ -32,6 +33,7 @@ class PygameFrame(ttk.Frame):
         self.player_speed = 5
         self.goal_x, self.goal_y = 200, 200
         self.update_canvas()
+
 
     def update_canvas(self):
         self.canvas.delete("all")
@@ -55,6 +57,8 @@ class PygameFrame(ttk.Frame):
         self.after(30, self.update_canvas)
 
     def move_player(self, direction):
+        if self.collision:
+            return
         if direction == "w":
             self.player_y -= self.player_speed
         elif direction == "s":
@@ -71,7 +75,14 @@ class PygameFrame(ttk.Frame):
             self.player_y >= self.goal_y - 10 and
             self.player_y <= self.goal_y + 10
         ):
-            self.controller.open_text_file()
+
+            self.text_widget.config(state=tk.NORMAL)
+            self.collision = True
+
+        else:
+
+            self.text_widget.config(state=tk.DISABLED)
+            self.collision = False
 
 class AppController:
     def __init__(self, root):
@@ -88,11 +99,6 @@ class AppController:
         # Zobrazení notebooku
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
-
-
-
-
-
         # Přidání záložek do notebooku
         self.pygame_frame = PygameFrame(self.notebook, self)
         self.notebook.add(self.pygame_frame, text="PyLand Adventure")
@@ -103,25 +109,18 @@ class AppController:
         with open("saved_text.txt", "w") as file:  # Otevření souboru pro zápis
             file.write(text_to_save)  # Uložení textu do souboru
 
-
-
-
-
-
-
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("PythLand")
     app_controller = AppController(root)
 
     def on_key_press(event):
-        if event.keysym in ["w", "s", "a", "d"]:
+        if event.keysym in ["w", "s", "a", "d"]:  # pohyb hráče
             app_controller.pygame_frame.move_player(event.keysym)
-
-
-        elif event.keysym in ["c", "u"]:  # Přidání kláves "u", "c" a "d" pro uložení textu
-
+        elif event.keysym in ["c", "p"]:  # uložení txt souboru napsaného kódu
             app_controller.save_text()
+        elif event.keysym == "r":  # reset polohy hráče
+            app_controller.pygame_frame.player_x, app_controller.pygame_frame.player_y = 200, 150
 
     root.bind("<Key>", on_key_press)
     root.mainloop()
