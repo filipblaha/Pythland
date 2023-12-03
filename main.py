@@ -1,57 +1,118 @@
-import pygame
-import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QTextEdit
-from PyQt6.QtCore import Qt
+import tkinter as tk
+from tkinter import ttk
 
-from object import Object
-from text import Text
+class PygameFrame(ttk.Frame):
+    def __init__(self, parent, controller):
+        super().__init__(parent)
+        self.controller = controller
+        self.init_ui()
+
+    def init_ui(self):
+        self.canvas = tk.Canvas(self, width=950, height=500)
+        self.canvas.grid(row=0, column=1, sticky="nsew")
+
+        self.text_widget = tk.Text(self)
+        self.text_widget.grid(row=0, column=0, sticky="nsew")
+
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_rowconfigure(0, weight=1)
+
+        self.pack(fill=tk.BOTH, expand=True)
+        self.player_x, self.player_y = 200, 150
+        self.player_speed = 5
+        self.goal_x, self.goal_y = 200, 200
+        self.update_canvas()
+
+    def update_canvas(self):
+        self.canvas.delete("all")
+
+        # Vykreslení hráče
+        self.canvas.create_rectangle(
+            self.player_x - 10, self.player_y - 10,
+            self.player_x + 10, self.player_y + 10,
+            fill="blue"
+        )
+
+        # Vykreslení cíle
+        self.canvas.create_rectangle(
+            self.goal_x - 5, self.goal_y - 5,
+            self.goal_x + 5, self.goal_y + 5,
+            fill="red"
+        )
+
+        self.check_goal()
+
+        self.after(30, self.update_canvas)
+
+    def move_player(self, direction):
+        if direction == "w":
+            self.player_y -= self.player_speed
+        elif direction == "s":
+            self.player_y += self.player_speed
+        elif direction == "a":
+            self.player_x -= self.player_speed
+        elif direction == "d":
+            self.player_x += self.player_speed
+
+    def check_goal(self):
+        if (
+            self.player_x >= self.goal_x - 10 and
+            self.player_x <= self.goal_x + 10 and
+            self.player_y >= self.goal_y - 10 and
+            self.player_y <= self.goal_y + 10
+        ):
+            self.controller.open_text_file()
+
+class AppController:
+    def __init__(self, root):
+        self.root = root
+        self.notebook = ttk.Notebook(root)
+
+        self.tkinter_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.tkinter_frame, text="Our PyLand")
+
+        # Label a text pro Tkinter frame
+        self.tkinter_label = tk.Label(self.tkinter_frame, text="Tady bude zadání")
+        self.tkinter_label.grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
+
+        # Zobrazení notebooku
+        self.notebook.pack(fill=tk.BOTH, expand=True)
+
+        self.text_file_content = "Textový soubor obsahuje tuto informaci."
 
 
-class PygameWidget(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.init_pygame()
 
-    def init_pygame(self):
-        pygame.init()
-        self.clock = pygame.time.Clock()
-        self.player = Object('player.png', 50, 50, 600, 300, 1)
-        self.text = Text("Arial", 36)
-        self.run = True
 
-    def player_input(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
-                self.run = False
-        return pygame.key.get_pressed()
+        # Přidání záložek do notebooku
+        self.pygame_frame = PygameFrame(self.notebook, self)
+        self.notebook.add(self.pygame_frame, text="PyLand Adventure")
 
-    def logic(self, action_from_input):
-        if not action_from_input:
-            self.run = False
-        else:
-            self.player.movement(action_from_input)
 
-    def render_game(self):
-        self.clock.tick(140)
-        self.display.fill((0, 0, 0))
-        pygame.draw.rect(self.display, (255, 255, 255), (550, 50, 840, 750), 5)
-        self.display.blit(self.player.sprite, (self.player.x, self.player.y))
-        self.text.render(self, str(self.player.x), 200, 200)
-        self.text.render(self, str(self.player.y), 200, 240)
+    def save_text(self):
+        text_to_save = self.pygame_frame.text_widget.get("1.0", tk.END)  # Získání textu z widgetu
+        with open("saved_text.txt", "w") as file:  # Otevření souboru pro zápis
+            file.write(text_to_save)  # Uložení textu do souboru
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.central_widget = PygameWidget()
-        self.setCentralWidget(self.central_widget)
 
-    def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Space:
-            # Toggle between Pygame and QTextEdit visibility
-            self.central_widget.setVisible(not self.central_widget.isVisible())
+
+
+
+
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
-    sys.exit(app.exec())
+    root = tk.Tk()
+    root.title("PythLand")
+    app_controller = AppController(root)
+
+    def on_key_press(event):
+        if event.keysym in ["w", "s", "a", "d"]:
+            app_controller.pygame_frame.move_player(event.keysym)
+
+
+        elif event.keysym in ["c", "u"]:  # Přidání kláves "u", "c" a "d" pro uložení textu
+
+            app_controller.save_text()
+
+    root.bind("<Key>", on_key_press)
+    root.mainloop()

@@ -1,5 +1,4 @@
 import pygame
-from screen import Screen
 
 class Object:
     def __init__(self, png, width, height, x, y, speed):
@@ -9,13 +8,13 @@ class Object:
         self.y = y
         self.speed = speed
 
-    def movement(self, keys):
-        if keys[pygame.K_a]:
-            self.x -= self.speed
-        if keys[pygame.K_d]:
-            self.x += self.speed
-        if keys[pygame.K_w]:
-            self.y -= self.speed
-        if keys[pygame.K_s]:
-            self.y += self.speed
+    def movement(self, direction):
+        if direction == "up":
+            self.player_y -= 10
+        elif direction == "down":
+            self.player_y += 10
+        elif direction == "left":
+            self.player_x -= 10
+        elif direction == "right":
+            self.player_x += 10
 
