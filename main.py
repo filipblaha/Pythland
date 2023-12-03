@@ -9,14 +9,23 @@ class PygameFrame(ttk.Frame):
 
     def init_ui(self):
         self.canvas = tk.Canvas(self, width=950, height=500)
-        self.canvas.grid(row=0, column=1, sticky="nsew")
+        self.canvas.grid(row=0, column=1, rowspan=2, sticky="nsew")
 
         self.text_widget = tk.Text(self)
-        self.text_widget.grid(row=0, column=0, sticky="nsew")
+        self.text_widget.grid(row=0, column=0, rowspan=2, sticky="nsew")
+
+        with open('zadanix.txt', 'r') as zadani:
+            zadani_cislox = zadani.read()
+
+        self.tkinter_label = tk.Label(self, text=zadani_cislox)
+        self.tkinter_label.grid(row=2, column=0, sticky="nsew")
 
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(2, weight=1)
+
 
         self.pack(fill=tk.BOTH, expand=True)
         self.player_x, self.player_y = 200, 150
@@ -79,7 +88,7 @@ class AppController:
         # Zobrazení notebooku
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
-        self.text_file_content = "Textový soubor obsahuje tuto informaci."
+
 
 
 
