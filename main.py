@@ -117,7 +117,7 @@ if __name__ == "__main__":
     def on_key_press(event):
         if event.keysym in ["w", "s", "a", "d"]:  # pohyb hráče
             app_controller.pygame_frame.move_player(event.keysym)
-        elif event.keysym in ["c", "p"]:  # uložení txt souboru napsaného kódu
+        elif event.keysym in ["c", "p"]:  # uložení txt souboru napsaného kódu (jako commit a push (haha))
             app_controller.save_text()
         elif event.keysym == "r":  # reset polohy hráče
             app_controller.pygame_frame.player_x, app_controller.pygame_frame.player_y = 200, 150
