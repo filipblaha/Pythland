@@ -1,0 +1,11 @@
+Ahoj, tohle je Pytňák. Jsem tvůj kamarád, který ti pomůže naučit se programovat.
+Programování je zábavné a užitečné. Můžeš vytvářet různé hry, aplikace, webové stránky a další zajímavé věci.
+Programování je také způsob, jak říct počítači, co má dělat. Počítač rozumí jen speciálnímu jazyku, který se nazývá programovací jazyk.
+Existuje mnoho různých programovacích jazyků, ale my se naučíme jeden z nich, který se jmenuje VOLVO_TURBO_D5.
+VOLVO_TURBO_D5 je jednoduchý a přehledný jazyk, který se hodí pro začátečníky i pokročilé.
+
+V této hře se budeš pohybovat po herním poli, kde budeš potkávat různé překážky. Tyto překážky můžeš překonat jen tím, že naprogramuješ jednoduchý kód v Pythonu. Kód je posloupnost příkazů, které počítač vykonává. Každý příkaz musí být napsán správně, jinak počítač nebude vědět, co má dělat. Když napíšeš kód, musíš dodržovat určitá pravidla, která se nazývají syntaxe. Syntaxe je jako gramatika pro programovací jazyk. Pokud porušíš syntaxi, počítač ti to řekne a ukáže ti, kde je chyba. To se nazývá chybová zpráva. Chybové zprávy ti pomohou opravit svůj kód a zlepšit se v programování.
+
+Neboj se, programování není těžké. Já ti budu pomáhat a radit, jak psát kód a co dělat, když se něco nepovede. Budu ti také ukazovat příklady kódu, které můžeš použít nebo upravit podle své fantazie. Budeš se učit různé koncepty a techniky programování, jako jsou proměnné, datové typy, cykly, podmínky, funkce a další. Tyto koncepty a techniky ti pomohou vytvářet složitější a zajímavější kódy a hry.
+
+Tak co, jsi připravený začít? Pokud ano, tak klikni na tlačítko PyLand Adventure a pojďme se společně naučit programovat v Pythonu. Doufám, že si to užiješ a budeš se bavit. Tak zatím ahoj! 👋
