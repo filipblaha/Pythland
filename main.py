@@ -7,9 +7,11 @@ class PygameFrame(ttk.Frame):
         self.init_ui()
         self.collision = False
 
+
     def init_ui(self):
         self.canvas = tk.Canvas(self, width=950, height=500)
         self.canvas.grid(row=0, column=1, rowspan=2, sticky="nsew")
+
 
         self.text_widget = tk.Text(self)
         self.text_widget.grid(row=0, column=0, rowspan=2, sticky="nsew")
@@ -92,9 +94,11 @@ class AppController:
         self.tkinter_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.tkinter_frame, text="Our PyLand")
 
-        # Label a text pro Tkinter frame
-        self.tkinter_label = tk.Label(self.tkinter_frame, text="Tady bude zadání")
-        self.tkinter_label.grid(row=0, column=0, padx=10, pady=10, sticky=tk.W)
+        with open('seznameni.txt', 'r') as seznameni:
+            privitaci_txt = seznameni.read()
+
+        self.tkinter_label = tk.Label(self.tkinter_frame, text=privitaci_txt, wraplength=900)
+        self.tkinter_label.grid(row=0, column=0, sticky="nsew")
 
         # Zobrazení notebooku
         self.notebook.pack(fill=tk.BOTH, expand=True)
@@ -114,6 +118,7 @@ if __name__ == "__main__":
     root.title("PythLand")
     app_controller = AppController(root)
 
+
     def on_key_press(event):
         if event.keysym in ["w", "s", "a", "d"]:  # pohyb hráče
             app_controller.pygame_frame.move_player(event.keysym)
@@ -121,6 +126,7 @@ if __name__ == "__main__":
             app_controller.save_text()
         elif event.keysym == "r":  # reset polohy hráče
             app_controller.pygame_frame.player_x, app_controller.pygame_frame.player_y = 200, 150
+
 
     root.bind("<Key>", on_key_press)
     root.mainloop()

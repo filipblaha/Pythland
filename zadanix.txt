@@ -1,2 +1,3 @@
-tak co?
-Co teď, možmá? super !
+ Ahoj, mladý dobrodruhu!
+ tvůj úkol je překonat různé překážky pomocí kouzelného nástroje zvaného "for cyklus". 
+Překáždu překonáš pouze pokud tento cyklus správně napíšeš. 
