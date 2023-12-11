@@ -1,5 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
+import sys
+
+import pygame.time
+
+clock = pygame.time.Clock()
+current_time = 0
+button_press_time = 0
+
 class PygameFrame(ttk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
@@ -8,11 +16,10 @@ class PygameFrame(ttk.Frame):
         self.collision = False
 
 
+
     def init_ui(self):
         self.canvas = tk.Canvas(self, width=950, height=500)
         self.canvas.grid(row=0, column=1, rowspan=2, sticky="nsew")
-
-
         self.text_widget = tk.Text(self)
         self.text_widget.grid(row=0, column=0, rowspan=2, sticky="nsew")
         self.text_widget.config(state=tk.DISABLED)
@@ -56,7 +63,10 @@ class PygameFrame(ttk.Frame):
 
         self.check_goal()
 
-        self.after(30, self.update_canvas)
+        if self.collision == 0:
+            self.after(30, self.update_canvas)
+        elif self.collision == 1:
+            self.after(1000, self.update_canvas)
 
     def move_player(self, direction):
         if self.collision:
@@ -91,21 +101,29 @@ class AppController:
         self.root = root
         self.notebook = ttk.Notebook(root)
 
+
+
+
+
         self.tkinter_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.tkinter_frame, text="Our PyLand")
+
+        self.notebook.add(self.tkinter_frame, text="Náš PyLand")
+
 
         with open('seznameni.txt', 'r') as seznameni:
             privitaci_txt = seznameni.read()
 
         self.tkinter_label = tk.Label(self.tkinter_frame, text=privitaci_txt, wraplength=900)
-        self.tkinter_label.grid(row=0, column=0, sticky="nsew")
+        self.tkinter_label.pack(padx=10, pady=250)  # pady určuje odsazení z vrchní a spodní strany
+
+
 
         # Zobrazení notebooku
         self.notebook.pack(fill=tk.BOTH, expand=True)
 
         # Přidání záložek do notebooku
         self.pygame_frame = PygameFrame(self.notebook, self)
-        self.notebook.add(self.pygame_frame, text="PyLand Adventure")
+        self.notebook.add(self.pygame_frame, text="Naše PyLand dobrodružství")
 
 
     def save_text(self):
@@ -120,13 +138,18 @@ if __name__ == "__main__":
 
 
     def on_key_press(event):
-        if event.keysym in ["w", "s", "a", "d"]:  # pohyb hráče
+        global button_press_time  # aktualizace aby to valilo
+        if event.keysym in ["w", "s", "a", "d"]:
             app_controller.pygame_frame.move_player(event.keysym)
-        elif event.keysym in ["c", "p"]:  # uložení txt souboru napsaného kódu (jako commit a push (haha))
-            app_controller.save_text()
-        elif event.keysym == "r":  # reset polohy hráče
-            app_controller.pygame_frame.player_x, app_controller.pygame_frame.player_y = 200, 150
+            button_press_time = pygame.time.get_ticks()  # Pohyb hráče
+        elif event.keysym in ["a", "c", "p"]:
+            app_controller.save_text()                  # Uložení pozice
+        elif event.keysym == "r":
+            current_time = pygame.time.get_ticks()  # Reset hráče
+            if current_time - button_press_time > 3000:
+                app_controller.pygame_frame.player_x, app_controller.pygame_frame.player_y = 200, 150
 
 
     root.bind("<Key>", on_key_press)
+
     root.mainloop()
