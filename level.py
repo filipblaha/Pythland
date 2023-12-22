@@ -1,10 +1,12 @@
 import pygame
+import os
 from settings import *
 from tile import Tile
 from player import Player
 from debug import debug
 from support import *
 from random import choice
+
 
 
 class Level:
@@ -26,7 +28,8 @@ class Level:
                 'object': import_csv_layout('map/zelda_Objects.csv'),
         }
         graphics = {
-                'grass': import_folder('map/Grass')
+                'grass': import_folder('map/Grass'),
+                'object': import_folder('map/Object')
         }
 
         for style,layout in layout.items():
@@ -37,13 +40,39 @@ class Level:
                         y = row_index * TILESIZE
                         if style == 'boundary':
                             Tile((x, y),[self.obstacle_sprite],'invinsible')
+
                         if style == 'grass':
                             random_grass_image = choice(graphics['grass'])
-                            Tile((x,y),[self.visible_sprites,self.obstacle_sprite],'grass',random_grass_image)
-                            pass
+                            Tile((x, y),[self.visible_sprites,self.obstacle_sprite],'grass',random_grass_image)
+
                         if style == 'object':
-        #                     pridani bjectu
-                            pass
+                            if int(col) == 198:  # Přiřazení obrázku pouze k polím s hodnotou 198
+                                image_name = 'TilesetNature_listnaty_strom_1-1.png'
+                                image_path = os.path.join('map', 'Object', image_name)
+                                surf = pygame.image.load(image_path).convert_alpha()
+                                Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
+                            if style == 'object':
+                                if int(col) == 199:  # Přiřazení obrázku pouze k polím s hodnotou 199
+                                    image_name = 'TilesetNature_listnaty_strom_1-2.png'
+                                    image_path = os.path.join('map', 'Object', image_name)
+                                    surf = pygame.image.load(image_path).convert_alpha()
+                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
+                            if style == 'object':
+                                if int(col) == 222:  # Přiřazení obrázku pouze k polím s hodnotou 222
+                                    image_name = 'TilesetNature_listnaty_strom_2-1.png'
+                                    image_path = os.path.join('map', 'Object', image_name)
+                                    surf = pygame.image.load(image_path).convert_alpha()
+                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
+                            if style == 'object':
+                                if int(col) == 223:  # Přiřazení obrázku pouze k polím s hodnotou 198
+                                    image_name = 'TilesetNature_listnaty_strom_2-2.png'
+                                    image_path = os.path.join('map', 'Object', image_name)
+                                    surf = pygame.image.load(image_path).convert_alpha()
+                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
+                            else:
+                                # V případě jiné hodnoty než 198 můžete provést jiné akce nebo ignorovat
+                                pass
+
         #         if col == '221':
         #             Tile((x,y),[self.visible_sprites, self.obstacle_sprite])
         #         if col == 'p':
