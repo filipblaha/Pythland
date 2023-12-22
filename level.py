@@ -6,8 +6,20 @@ from player import Player
 from debug import debug
 from support import *
 from random import choice
+from ui import UI
 
+import pygame
 
+# Nastavení rozlišení hry
+NEW_WIDTH = WIDTH * 1
+NEW_HEIGHT = HEIGHT * 1
+
+# Inicializace Pygame
+pygame.init()
+
+# Nastavení velikosti obrazovky
+screen = pygame.display.set_mode((NEW_WIDTH, NEW_HEIGHT))
+pygame.display.set_caption("Your Game Title")
 
 class Level:
     def __init__(self):
@@ -21,6 +33,10 @@ class Level:
 
         #sprite setup
         self.creat_map()
+
+    #   user interface
+        self.ui = UI()
+
     def creat_map(self):
         layout = {
                 'boundary': import_csv_layout('map/zelda_FloorBlocks.csv'),
@@ -46,37 +62,25 @@ class Level:
                             Tile((x, y),[self.visible_sprites,self.obstacle_sprite],'grass',random_grass_image)
 
                         if style == 'object':
-                            if int(col) == 198:  # Přiřazení obrázku pouze k polím s hodnotou 198
-                                image_name = 'TilesetNature_listnaty_strom_1-1.png'
+                            if int(col) == 222:
+                                image_name = 'ListStrom.png'
                                 image_path = os.path.join('map', 'Object', image_name)
                                 surf = pygame.image.load(image_path).convert_alpha()
                                 Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
-                            if style == 'object':
-                                if int(col) == 199:  # Přiřazení obrázku pouze k polím s hodnotou 199
-                                    image_name = 'TilesetNature_listnaty_strom_1-2.png'
-                                    image_path = os.path.join('map', 'Object', image_name)
-                                    surf = pygame.image.load(image_path).convert_alpha()
-                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
-                            if style == 'object':
-                                if int(col) == 222:  # Přiřazení obrázku pouze k polím s hodnotou 222
-                                    image_name = 'TilesetNature_listnaty_strom_2-1.png'
-                                    image_path = os.path.join('map', 'Object', image_name)
-                                    surf = pygame.image.load(image_path).convert_alpha()
-                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
-                            if style == 'object':
-                                if int(col) == 223:  # Přiřazení obrázku pouze k polím s hodnotou 198
-                                    image_name = 'TilesetNature_listnaty_strom_2-2.png'
-                                    image_path = os.path.join('map', 'Object', image_name)
-                                    surf = pygame.image.load(image_path).convert_alpha()
-                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
-                            else:
-                                # V případě jiné hodnoty než 198 můžete provést jiné akce nebo ignorovat
-                                pass
 
-        #         if col == '221':
-        #             Tile((x,y),[self.visible_sprites, self.obstacle_sprite])
-        #         if col == 'p':
-        #             self.player = Player((x,y),[self.visible_sprites],self.obstacle_sprite)
+                            if int(col) == 26:
+                                    image_name = 'JehlStrom.png'
+                                    image_path = os.path.join('map', 'Object', image_name)
+                                    surf = pygame.image.load(image_path).convert_alpha()
+                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
+
+                            if int(col) == -2147482840:
+                                    image_name = 'Ztrazce_cely.png'
+                                    image_path = os.path.join('map', 'Object', image_name)
+                                    surf = pygame.image.load(image_path).convert_alpha()
+                                    Tile((x, y), [self.visible_sprites, self.obstacle_sprite], 'object', surf)
+
+
         self.player = Player((195, 170), [self.visible_sprites], self.obstacle_sprite)
 
 
@@ -85,8 +89,7 @@ class Level:
         #update and draw the game
         self.visible_sprites.custum_draw(self.player)
         self.visible_sprites.update()
-        debug(self.player.direction)
-
+        self.ui.display(self.player)
 class YSortCameraGroup (pygame.sprite.Group):
     def __init__(self):
 
@@ -107,10 +110,11 @@ class YSortCameraGroup (pygame.sprite.Group):
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
 
+
         # vykreslovani podlahy
         floor_offset_pos = self.floor_rect.topleft - self.offset
         self.display_surface.blit(self.floor_surf,floor_offset_pos)
 
-        for sprite in sorted(self.sprites(),key=lambda sprite: sprite.rect.centery):
+        for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image,offset_pos)
