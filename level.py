@@ -7,6 +7,7 @@ from debug import debug
 from support import *
 from random import choice
 from ui import UI
+from menu import Menu
 
 import pygame
 
@@ -26,6 +27,7 @@ class Level:
 
         #get the display surface
         self.display_surface = pygame.display.get_surface()
+        self.game_paused = False
 
         #sprite group setup
         self.visible_sprites = YSortCameraGroup()
@@ -36,6 +38,10 @@ class Level:
 
     #   user interface
         self.ui = UI()
+        self.menu = Menu(self.player)
+
+        self.zoom_level = 1.0  # Úroveň přiblížení
+
 
     def creat_map(self):
         layout = {
@@ -83,13 +89,18 @@ class Level:
 
         self.player = Player((195, 170), [self.visible_sprites], self.obstacle_sprite)
 
-
+    def toggle_menu(self):
+        self.game_paused = not self.game_paused
 
     def run(self):
-        #update and draw the game
         self.visible_sprites.custum_draw(self.player)
-        self.visible_sprites.update()
-        self.ui.display(self.player)
+        # update and draw the game
+        # pause
+        if self.game_paused:
+            self.menu.display()
+        else:
+            self.visible_sprites.update()
+            self.ui.display(self.player)
 class YSortCameraGroup (pygame.sprite.Group):
     def __init__(self):
 
@@ -99,7 +110,6 @@ class YSortCameraGroup (pygame.sprite.Group):
         self.half_width = self.display_surface.get_size()[0] // 2
         self.half_height = self.display_surface.get_size()[1] // 2
         self.offset = pygame.math.Vector2()
-        self.zoom_level = 1.0  # Úroveň přiblížení
 
     #     vytvareni podlahy
         self.floor_surf = pygame.image.load('graphic/background.png').convert()

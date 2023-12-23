@@ -10,7 +10,7 @@ class Player(pygame.sprite.Sprite):
         self.hitbox = self.rect.inflate(0,-11)
 
         self.direction = pygame.math.Vector2()
-        self.speed = 3
+        self.speed = 2
 
         self.obstacle_sprite = obstacle_sprite
 
@@ -157,7 +157,7 @@ class Player(pygame.sprite.Sprite):
         # stats
         self.stats = {'health': 100}
         self.health = self.stats['health'] * 0.5 # UPRAVA ZIVOTU
-        self.exp = 123
+        self.exp = 1
     def update(self):
         self.input()
         self.move(self.speed)
