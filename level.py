@@ -11,8 +11,8 @@ from ui import UI
 import pygame
 
 # Nastavení rozlišení hry
-NEW_WIDTH = WIDTH * 1
-NEW_HEIGHT = HEIGHT * 1
+NEW_WIDTH = WIDTH
+NEW_HEIGHT = HEIGHT
 
 # Inicializace Pygame
 pygame.init()
