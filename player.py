@@ -1,5 +1,5 @@
 import pygame
-from settings import *
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self,pos,groups,obstacle_sprite):
@@ -158,6 +158,7 @@ class Player(pygame.sprite.Sprite):
         self.stats = {'health': 100}
         self.health = self.stats['health'] * 0.5 # UPRAVA ZIVOTU
         self.exp = 1
+        
     def update(self):
         self.input()
         self.move(self.speed)

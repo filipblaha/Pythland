@@ -1,9 +1,9 @@
 import os
 
-WIDTH   = 1920
-HEIGHT  = 1080
-FPS     = 60
-TILESIZE= 16
+WIDTH = 1920
+HEIGHT = 1080
+FPS = 60
+TILESIZE = 16
 
 
 # ui

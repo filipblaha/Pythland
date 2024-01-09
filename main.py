@@ -23,7 +23,6 @@ class Game:
                     if event.key == pygame.K_SPACE:
                         self.level.toggle_menu()
 
-
             self.screen.fill((0, 0, 0))
             self.level.run()
             pygame.display.update()

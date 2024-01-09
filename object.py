@@ -1,25 +1,4 @@
 import pygame
-from screen import Screen
-from settings import *
-
-# class Object:
-#     def __init__(self, png, width, height, x, y, speed):
-#         self.sprite = pygame.image.load(png)
-#         self.sprite = pygame.transform.scale(self.sprite, (width, height))
-#         self.x = x
-#         self.y = y
-#         self.speed = speed
-#
-#     def movement(self, keys):
-#         if keys[pygame.K_a]:
-#             self.x -= self.speed
-#         if keys[pygame.K_d]:
-#             self.x += self.speed
-#         if keys[pygame.K_w]:
-#             self.y -= self.speed
-#         if keys[pygame.K_s]:
-#             self.y += self.speed
-
 
 
 class Player(pygame.sprite.Sprite):
@@ -56,7 +35,6 @@ class Player(pygame.sprite.Sprite):
 
         self.hitbox.x += self.direction.x * speed
         self.hitbox.y += self.direction.y * speed
-        #self.rect.center += self.direction * speed
 
     def collision (self,direction):
         if direction == 'horizontal':

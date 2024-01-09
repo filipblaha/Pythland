@@ -24,8 +24,3 @@ def import_folder(path):
 
     return surface_list
 
-
-
-# terrain_map = import_csv_layout('map/zelda_FloorBlocks.csv')
-# for row in terrain_map:
-#     print(row)
